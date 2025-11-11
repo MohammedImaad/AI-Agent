@@ -1,0 +1,12 @@
+boto3
+chromadb
+sentence_transformers
+redis
+langgraph
+langchain_openai
+base58
+keyring
+solders
+solana
+pymongo
+twilio
