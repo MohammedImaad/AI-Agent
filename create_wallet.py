@@ -9,6 +9,8 @@ import boto3
 from dotenv import load_dotenv
 import base64
 from db import users
+import redis
+r = redis.Redis(host=os.getenv("REDIS_HOST", "localhost"), port=int(os.getenv("REDIS_PORT", 6379)), db=0, decode_responses=True)
 MAINNET_RPC_URL = "https://api.mainnet-beta.solana.com"
 load_dotenv()
 ARN=os.getenv("KEY_ARN")
@@ -30,6 +32,8 @@ def create_wallet(phone_number: str):
             "address": str(keypair.pubkey()),
             "private_key": encrypted_key
     })
+    r.setex(f"wallet_address:{phone_number}", 3600, str(keypair.pubkey()))
+
     return {
         "public_key": str(keypair.pubkey()),
         "private_key_base58": private_key_base58
